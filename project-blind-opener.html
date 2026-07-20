@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Lorem ipsum dolor sit amet, consectetur adipiscing elit.">
+  <title>Automated Roller Blind Opener — Jerry Cai</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="nav-row">
+      <span class="nav-name">JERRY CAI</span>
+      <nav class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="projects.html" class="active">Projects</a>
+        <a href="resume.html">Resume</a>
+        <a class="nav-badge" href="https://www.linkedin.com/in/YOUR-LINKEDIN" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" />
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="project-detail">
+      <a class="back-link" href="projects.html">&larr; Back to projects</a>
+
+      <h1>Automated Roller Blind Opener</h1>
+
+      <div class="title-block">
+        <div class="title-block-field">
+          <span class="label">Status</span>
+          <span class="value">In Progress</span>
+        </div>
+        <div class="title-block-field">
+          <span class="label">Tools</span>
+          <span class="value">Arduino Uno, Fusion 360</span>
+        </div>
+        <div class="title-block-field">
+          <span class="label">Category</span>
+          <span class="value">Mechatronics</span>
+        </div>
+      </div>
+
+      <p>
+        A roller blind opener that automatically raises and lowers a blind based on
+        a schedule and ambient light level — no manual pulling required. Built around
+        an ELEGOO Uno R3 (Arduino-compatible) board and a 28BYJ-48 stepper motor.
+      </p>
+
+      <h2>How it works</h2>
+      <ul>
+        <li>A photoresistor reads ambient light level to decide when to trigger.</li>
+        <li>A DS3231 real-time clock module allows scheduled open/close times.</li>
+        <li>A 28BYJ-48 stepper motor drives a custom sprocket that engages the
+          blind's 4.5&nbsp;mm bead chain.</li>
+        <li>The sprocket is a custom Fusion 360 design (~32&nbsp;mm diameter, 12&nbsp;mm tall),
+          3D printed to fit the motor's 5&nbsp;mm double-D shaft.</li>
+      </ul>
+
+      <h2>The hard part</h2>
+      <p>
+        The main engineering challenge was the mechanical coupling between the
+        stepper motor and the bead chain: the motor has a double-D shaft, which
+        means the sprocket needs a matching double-D bore (or a precise 4.9&nbsp;mm
+        press fit) rather than a simple round hole and glue. Getting that
+        tolerance right in Fusion 360 before sending it out for printing was the
+        key design step.
+      </p>
+
+      <h2>What's next</h2>
+      <p>
+        Finishing the electrical side with the RTC module, then testing the printed
+        sprocket under load once it's ready.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap"></div>
+  </footer>
+
+</body>
+</html>
