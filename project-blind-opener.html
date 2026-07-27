@@ -29,16 +29,17 @@
     <section class="project-detail">
       <a class="back-link" href="projects.html">&larr; Back to projects</a>
 
-      <h1>Automated Roller Blind Opener</h1>
+      <h1>Circadian Rythm Optimizer ★</h1>
+      <p style="margin-top: -8px; color: #6b7280; font-size: 0.95rem;">Published July 26, 2026</p>
 
       <div class="title-block">
         <div class="title-block-field">
           <span class="label">Status</span>
-          <span class="value">In Progress</span>
+          <span class="value">Completed</span>
         </div>
         <div class="title-block-field">
           <span class="label">Tools</span>
-          <span class="value">Arduino Uno, Fusion 360</span>
+          <span class="value">Arduino, Fusion 360</span>
         </div>
         <div class="title-block-field">
           <span class="label">Category</span>
@@ -46,36 +47,154 @@
         </div>
       </div>
 
+      <h2>Overview</h2>
       <p>
-        A roller blind opener that automatically raises and lowers a blind based on
-        a schedule and ambient light level — no manual pulling required. Built around
-        an ELEGOO Uno R3 (Arduino-compatible) board and a 28BYJ-48 stepper motor.
+        Recently, I have been on a journey toward improving my sleep schedule and overall health.
+        During the school semester, I may have let my routines slip out of control a little too
+        much, and considering that summer was right around the corner, I decided to utilize some
+        "zeitgeber science".
+      </p>
+      <p>
+        While perusing the web, I discovered a consensus among health-focused sources about the
+        benefits of early-morning sun exposure. I investigated the topic further and found many
+        articles and meta-analyses pointing to potential benefits such as increased wakefulness in
+        the mornings and higher-quality sleep later in the evening, influenced by several
+        neurochemicals and hormones optimized during these studies.
+      </p>
+      <p>
+        I took it into my own hands to develop a mechanism that would automatically roll my blinds
+        based on how much sunlight there was. I used an old Arduino kit to experiment with
+        different systems of rotational motion, paired with a photoresistor and RTC module.
       </p>
 
-      <h2>How it works</h2>
+      <h2>Schematic</h2>
+      <img src="images/schematic-fritzing.png" alt="Circuit layout using Fritzing software showing Arduino, breadboard, stepper motor driver, RTC module, and photoresistor connections" style="max-width: 100%; height: auto; margin: 20px 0; border-radius: 4px;">
+      <p>Circuit layout using Fritzing software.</p>
+      <img src="images/fusion-mockup.png" alt="Fusion 360 rendered mockup of the case designed to house the electronics and stepper motor" style="max-width: 100%; height: auto; margin: 20px 0; border-radius: 4px;">
+      <p>A rendered mockup in Fusion 360 of the case the electronics would sit in if I had access to a 3D printer.</p>
+
+      <h2>Technical Components</h2>
       <ul>
-        <li>A photoresistor reads ambient light level to decide when to trigger.</li>
-        <li>A DS3231 real-time clock module allows scheduled open/close times.</li>
-        <li>A 28BYJ-48 stepper motor drives a custom sprocket that engages the
-          blind's 4.5&nbsp;mm bead chain.</li>
-        <li>The sprocket is a custom Fusion 360 design (~32&nbsp;mm diameter, 12&nbsp;mm tall),
-          3D printed to fit the motor's 5&nbsp;mm double-D shaft.</li>
+        <li>ELEGOO Arduino Uno R3</li>
+        <li>30 tie-points breadboard</li>
+        <li>Photoresistor (photocell)</li>
+        <li>RTC module</li>
+        <li>ULN2003 stepper motor driver module</li>
+        <li>10 kΩ resistor</li>
+        <li>Jumper wires</li>
       </ul>
 
-      <h2>The hard part</h2>
+      <h2>Difficulties</h2>
       <p>
-        The main engineering challenge was the mechanical coupling between the
-        stepper motor and the bead chain: the motor has a double-D shaft, which
-        means the sprocket needs a matching double-D bore (or a precise 4.9&nbsp;mm
-        press fit) rather than a simple round hole and glue. Getting that
-        tolerance right in Fusion 360 before sending it out for printing was the
-        key design step.
+        During this project, I documented my process of design and construction, specifically recording
+        difficulties encountered that posed a challenge to the workflow. One considerable obstacle was
+        finding the most optimal apparatus to translate the motor's rotational force to pull the cord.
+      </p>
+      <p>
+        I tested several strategies using rubber Lego wheels and tooth floss, respectively. These both
+        failed because the rubber could not provide enough friction to make the cord spin, and the
+        makeshift capstan could not grip the floss or convert torque. I decided to outsource a 3D-printed
+        sprocket that would mesh with the spherical beads, doubling down on using a gear to transmit the
+        motor's power.
+      </p>
+      <p>
+        Further testing showed that the stepper motor producing 34.3 mN·m of torque was insufficient to
+        overcome the friction of the 3D sprocket and the blind clutch. I deduced that switching to the
+        NEMA-17 motor, which produces approximately 40 to 60 N·cm of torque, would be sufficient in
+        future iterations. Due to financial constraints, further testing has ground to a halt.
+      </p>
+      <p>
+        I would also like to point out that the teeth of the sprocket were not the issue, as the motor was
+        able to pull the cord when slack.
       </p>
 
-      <h2>What's next</h2>
+      <h2>Final Design</h2>
+      <img src="images/final iteration.jpg" alt="Physical apparatus setup with Arduino, breadboard, motor and components mounted on window sill" style="max-width: 100%; height: auto; margin: 20px 0; border-radius: 4px;">
       <p>
-        Finishing the electrical side with the RTC module, then testing the printed
-        sprocket under load once it's ready.
+        The makeshift design is duly noted; the most important factor in holding the apparatus in place is
+        tension. Binding hockey tape in a way that restricts the motor and gear from moving was adequate for
+        testing. 
+      </p>
+      <img src="images/sprocket.jpg" alt="3D printed sprocket component" style="max-width: 100%; height: auto; margin: 20px 0; border-radius: 4px;">
+      <p>The 3D sprocket.
+      </p>
+
+      <h2>Code</h2>
+      <details>
+        <summary>View Code</summary>
+        <pre><code>#include &lt;Wire.h&gt;
+#include &lt;RTClib.h&gt;
+#include &lt;Stepper.h&gt;
+
+#define STEPS 2048
+Stepper motor(STEPS, 8, 10, 9, 11);
+RTC_DS3231 rtc;
+
+int openHour = 7;
+int openMin = 30;
+int closeHour = 21;
+int closeMin = 0;
+int lightThreshold = 600;
+long stepsToOpen = 30000;
+
+bool isOpen = false;
+
+void openBlind() {
+  motor.step(stepsToOpen);
+  isOpen = true;
+  Serial.println("opened");
+}
+
+void closeBlind() {
+  motor.step(-stepsToOpen);
+  isOpen = false;
+  Serial.println("closed");
+}
+
+void setup() {
+  Serial.begin(9600);
+  motor.setSpeed(10);
+  Wire.begin();
+  rtc.begin();
+}
+
+void loop() {
+  DateTime now = rtc.now();
+  int light = analogRead(A0);
+  Serial.print(now.hour());
+  Serial.print(":");
+  if (now.minute() &lt; 10) Serial.print("0");
+  Serial.print(now.minute());
+  Serial.print("  light: ");
+  Serial.println(light);
+
+  bool timeCondition = (now.hour() == openHour &amp;&amp; now.minute() == openMin);
+  bool lightCondition = (light &gt; lightThreshold &amp;&amp; now.hour() &gt;= 5 &amp;&amp; now.hour() &lt; 10);
+
+  if ((timeCondition || lightCondition) &amp;&amp; !isOpen) {
+    openBlind();
+  }
+
+  if (now.hour() == closeHour &amp;&amp; now.minute() == closeMin &amp;&amp; isOpen) {
+    closeBlind();
+  }
+
+  delay(45000);
+}</code></pre>
+      </details>
+
+      <h2>Next Steps</h2>
+      <p>
+        Moving forward, an obvious goal is to have the apparatus properly running with sufficient power
+        and torque. Future iterations could focus on tailoring a shelf or platform to securely fasten the
+        motor and breadboard, which would improve the visual appeal and optimize power transmission through
+        increased tension. By utilizing 3D printing services, I believe this goal is feasible and can be
+        achieved in the foreseeable future.
+      </p>
+      <p>
+        Overall, I am not unfulfilled by the incompleteness. I believe this project introduced me to the
+        "physical moat" of engineering and taught me how to deal with adversity and the importance of
+        planning. It is with amicability that I conclude the "Circadian Rhythm Optimizer."
       </p>
     </section>
   </main>
