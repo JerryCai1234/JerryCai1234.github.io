@@ -4,10 +4,105 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Lorem ipsum dolor sit amet, consectetur adipiscing elit.">
-  <title>[Project Name] — Jerry Cai</title>
+  <title>Sedentary Squat Counter Reminder — Jerry Cai</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    .project-detail .code-tabs {
+      margin-top: 20px;
+      border: 1px solid var(--line);
+      background: #f4f1eb;
+    }
+
+    .code-details {
+      margin-top: 20px;
+    }
+
+    .code-details summary {
+      display: inline-block;
+      padding: 10px 16px;
+      border: 1px solid var(--ink);
+      color: var(--ink);
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      list-style: none;
+    }
+
+    .code-details summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .code-details summary::before {
+      content: "+ ";
+    }
+
+    .code-details[open] summary::before {
+      content: "- ";
+    }
+
+    .code-details summary:hover {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .code-tabs input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .code-tab-labels {
+      display: flex;
+      border-bottom: 1px solid var(--line);
+      background: var(--paper);
+    }
+
+    .code-tab-labels label {
+      flex: 1;
+      padding: 12px 16px;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .code-tab-labels label:hover,
+    #main-window-tab:checked ~ .code-tab-labels label[for="main-window-tab"],
+    #squat-counter-tab:checked ~ .code-tab-labels label[for="squat-counter-tab"] {
+      color: var(--ink);
+      background: var(--accent-soft);
+    }
+
+    .code-panel {
+      display: none;
+      overflow-x: auto;
+      padding: 18px;
+    }
+
+    #main-window-tab:checked ~ .code-panel.main-window,
+    #squat-counter-tab:checked ~ .code-panel.squat-counter {
+      display: block;
+    }
+
+    .code-panel pre {
+      margin: 0;
+      color: var(--ink);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      line-height: 1.55;
+      white-space: pre;
+    }
+
+    .project-video {
+      width: 100%;
+      margin: 20px 0;
+      border: 1px solid var(--line);
+      background: #111;
+    }
+  </style>
 </head>
 <body>
 
@@ -29,36 +124,334 @@
     <section class="project-detail">
       <a class="back-link" href="projects.html">&larr; Back to projects</a>
 
-      <h1>[Project Name]</h1>
+      <h1>Sedentary Squat Counter Reminder ★</h1>
+      <p style="margin-top: -8px; color: #6b7280; font-size: 0.95rem;">Published August 22, 2026</p>
 
       <div class="title-block">
         <div class="title-block-field">
           <span class="label">Status</span>
-          <span class="value">[Complete / In Progress]</span>
+          <span class="value">Complete</span>
         </div>
         <div class="title-block-field">
           <span class="label">Tools</span>
-          <span class="value">[Tool, Tool, Tool]</span>
+          <span class="value">C#, WPF (.NET Framework), Visual Studio</span>
         </div>
         <div class="title-block-field">
           <span class="label">Category</span>
-          <span class="value">[Category]</span>
+          <span class="value">Mechatronics</span>
         </div>
       </div>
 
-      <p>[1-2 sentence summary: what it is and why you built it.]</p>
+        <h2>Overview</h2>
+        <p>
+        To perpetuate the salubrious tenets of my last project, I wanted to find a solution to another friction point in my life that was adversely affecting my health. Like many people, I sit at my desk to do most of my studying and personal avocations. However, during long sedentary bouts of inactivity, I've physically noticed myself feeling stiff and lethargic. It turns out my anecdotal experiences are indeed valid and backed by extensive scientific research. Studies link prolonged sedentary behavior to higher risks of obesity, type 2 diabetes, heart disease, certain cancers, and early death; combined with the fact that approximately 31% of the world's adult population is at risk of incurring these hypokinetic diseases, I resolved that this was a problem worth pursuing.
+        </p>
+        <p>
+        The most effective resolution to counteract these diseases is to incorporate periodic active habits during prolonged inactive stints. The consensus that taking a walk is the "default" exercise actually overshadows the plethora of benefits of substituting in bodyweight squats. Due to its inherent biomechanical profile, it recruits large muscle groups such as the quads and glutes that act as glucose sponges during contraction; this results in lowering blood pressure and sending blood from the lower body to the head, improving overall executive function. Additionally, it is more accessible than walking as it doesn't take much room and can be done in less time.
+        </p>
 
-      <h2>How it works</h2>
-      <ul>
-        <li>[Key mechanism or component #1]</li>
-        <li>[Key mechanism or component #2]</li>
-      </ul>
+        <h2>Schematic</h2>
+        <p>
+        I decided to utilize the 3D tracking capabilities of my old Kinect sensor from my Xbox 360, paired with Kinect's own software infrastructure for Windows. Using the SkeletonBasics-WPF application from the Developer Toolkit in Visual Studio, this prototype was able to track my joints and process information.
+        </p>
 
-      <h2>The hard part</h2>
-      <p>[What was the actual engineering challenge? Be specific.]</p>
+        <h2>Logic</h2>
+        <p>
+        The application periodically (adjustable time periods) pops up SkeletonBasics-WPF's interface with a rep counter that increments after each successive squat. The window can only be shut off after the repetitions hit the goal (also adjustable), giving a dire incentive for the user to actually complete the physical break. Custom detection logic also prevents cheating, in case a user wants to circumvent the system; each successive repetition is based on joint angle, barring half-reps, etc.
+        </p>
 
-      <h2>What's next</h2>
-      <p>[Optional — what you'd improve or add.]</p>
+        <h2>Technical Components</h2>
+        <ul>
+        <li>Kinect for Windows Runtime v1.8</li>
+        <li>Kinect for Windows SDK v1.8</li>
+        <li>Kinect for Windows Developer Toolkit v1.8</li>
+        <li>Xbox 360 Kinect Camera</li>
+        <li>Xbox 360 Kinect AC Adapter</li>
+        <li>SkeletonBasics-WPF</li>
+        <li>C#</li>
+        <li>WPF</li>
+        <li>.NET Framework</li>
+        </ul>
+
+        <h2>Challenges</h2>
+        <p>
+        A technical issue I ran into during testing was the repetition counter resetting back to zero after calibration. In SquatCounter, I added a one-liner of code to resolve this hiccup in the Reset() method: <code>if (Reps &gt;= Goal) { Reps = 0; }</code>. This ensures that the program resets the rep counter only if the goal has been reached, meaning that the squats already done do not get wiped.
+        </p>
+
+        <h2>Demonstration</h2>
+        <p>Embedded screen recording of project:</p>
+        <video class="project-video" controls preload="metadata">
+        <source src="images/Sedentary%20Squat%20Counter%20Reminder%20Screen%20Recording.mp4" type="video/mp4">
+        Your browser does not support embedded video.
+        </video>
+
+        <h2>Kinect Camera</h2>
+        <img src="images/kinect%20image.jpeg" alt="Xbox 360 Kinect camera and sensor">
+        <p>Xbox 360 Kinect sensor used for the project's 3D skeletal tracking.</p>
+
+        <h2>Code</h2>
+        <details class="code-details">
+          <summary>See code</summary>
+          <div class="code-tabs">
+            <input type="radio" name="code-tabs" id="main-window-tab" checked>
+            <input type="radio" name="code-tabs" id="squat-counter-tab">
+            <div class="code-tab-labels">
+              <label for="main-window-tab">MainWindow.xaml.cs</label>
+              <label for="squat-counter-tab">SquatCounter.cs</label>
+            </div>
+            <div class="code-panel main-window">
+              <pre><code>// MainWindow.xaml.cs
+    namespace Microsoft.Samples.Kinect.SkeletonBasics
+    {
+      using System;
+      using System.IO;
+      using System.Windows;
+      using System.Windows.Media;
+      using System.Windows.Threading;
+      using Microsoft.Kinect;
+
+      public partial class MainWindow : Window
+      {
+        private const float RenderWidth = 640.0f;
+        private const float RenderHeight = 480.0f;
+        private const double JointThickness = 3;
+        private const double BodyCenterThickness = 10;
+        private const double ClipBoundsThickness = 10;
+
+        private readonly Brush centerPointBrush = Brushes.Blue;
+        private readonly Brush trackedJointBrush = new SolidColorBrush(Color.FromArgb(255, 68, 192, 68));
+        private readonly Brush inferredJointBrush = Brushes.Yellow;
+        private readonly Pen trackedBonePen = new Pen(Brushes.Green, 6);
+        private readonly Pen inferredBonePen = new Pen(Brushes.Gray, 1);
+
+        private KinectSensor sensor;
+        private DrawingGroup drawingGroup;
+        private DrawingImage imageSource;
+        private SquatCounter squatCounter = new SquatCounter();
+        private DispatcherTimer checkInTimer;
+        private System.Windows.Forms.NotifyIcon trayIcon;
+        private bool isLocked = false;
+        private static readonly TimeSpan CheckInInterval = TimeSpan.FromHours(1);
+
+        public MainWindow()
+        {
+          InitializeComponent();
+        }
+
+        private void WindowLoaded(object sender, RoutedEventArgs e)
+        {
+          this.drawingGroup = new DrawingGroup();
+          this.imageSource = new DrawingImage(this.drawingGroup);
+          Image.Source = this.imageSource;
+
+          foreach (var potentialSensor in KinectSensor.KinectSensors)
+          {
+            if (potentialSensor.Status == KinectStatus.Connected)
+            {
+              this.sensor = potentialSensor;
+              break;
+            }
+          }
+
+          if (null != this.sensor)
+          {
+            this.sensor.SkeletonStream.Enable();
+            this.sensor.SkeletonFrameReady += this.SensorSkeletonFrameReady;
+            try
+            {
+              this.sensor.Start();
+            }
+            catch (IOException)
+            {
+              this.sensor = null;
+            }
+          }
+
+          if (null == this.sensor)
+          {
+            this.statusBarText.Text = Properties.Resources.NoKinectReady;
+          }
+
+          this.checkInTimer = new DispatcherTimer();
+          this.checkInTimer.Interval = CheckInInterval;
+          this.checkInTimer.Tick += (s, args) =&gt; this.StartCheckIn();
+          this.checkInTimer.Start();
+          this.Hide();
+          this.ShowInTaskbar = false;
+        }
+
+        private void StartCheckIn()
+        {
+          this.squatCounter.Reset();
+          this.isLocked = true;
+          this.Dispatcher.Invoke(() =&gt;
+          {
+            this.WindowStyle = WindowStyle.None;
+            this.WindowState = WindowState.Maximized;
+            this.Topmost = true;
+            this.ShowInTaskbar = true;
+            this.Show();
+            this.Activate();
+          });
+        }
+
+        private void EndCheckIn()
+        {
+          this.isLocked = false;
+          this.Topmost = false;
+          this.WindowState = WindowState.Normal;
+          this.Hide();
+          this.ShowInTaskbar = false;
+        }
+
+        private void WindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+          if (this.isLocked)
+          {
+            e.Cancel = true;
+            return;
+          }
+          if (null != this.sensor) this.sensor.Stop();
+          if (this.trayIcon != null) this.trayIcon.Visible = false;
+        }
+
+        private void SensorSkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
+        {
+          Skeleton[] skeletons = new Skeleton[0];
+          using (SkeletonFrame skeletonFrame = e.OpenSkeletonFrame())
+          {
+            if (skeletonFrame != null)
+            {
+              skeletons = new Skeleton[skeletonFrame.SkeletonArrayLength];
+              skeletonFrame.CopySkeletonDataTo(skeletons);
+            }
+          }
+
+          Skeleton trackedSkeleton = null;
+          foreach (Skeleton skeleton in skeletons)
+          {
+            if (skeleton.TrackingState == SkeletonTrackingState.Tracked)
+            {
+              trackedSkeleton = skeleton;
+              break;
+            }
+          }
+
+          if (trackedSkeleton != null)
+          {
+            if (!this.squatCounter.IsCalibrated)
+              this.squatCounter.Calibrate(trackedSkeleton);
+            else
+              this.squatCounter.Process(trackedSkeleton);
+
+            this.RepCountText.Text = this.squatCounter.IsCalibrated
+              ? $"Reps: {this.squatCounter.Reps} / {this.squatCounter.Goal}"
+              : "Stand still to calibrate...";
+
+            if (this.isLocked &amp;&amp; this.squatCounter.Reps &gt;= this.squatCounter.Goal)
+              this.EndCheckIn();
+          }
+        }
+      }
+      }</code></pre>
+                </div>
+                <div class="code-panel squat-counter">
+                  <pre><code>// SquatCounter.cs
+    using Microsoft.Kinect;
+
+    public class SquatCounter
+    {
+      private enum State { Up, Down }
+      private State state = State.Up;
+      private float standingKneeAngle;
+      private int calibrationFrames = 0;
+      private float angleSum = 0f;
+
+      public bool IsCalibrated { get; private set; } = false;
+      public int Reps { get; private set; } = 0;
+      public int Goal { get; set; } = 20;
+
+      private const float DownOffset = 60f;
+      private const float UpOffset = 20f;
+      private const int DebounceFrames = 8;
+      private int framesPastDownThreshold = 0;
+      private int framesPastUpThreshold = 0;
+
+      private float GetKneeAngle(Skeleton skeleton)
+      {
+        var hip = skeleton.Joints[JointType.HipLeft].Position;
+        var knee = skeleton.Joints[JointType.KneeLeft].Position;
+        var ankle = skeleton.Joints[JointType.AnkleLeft].Position;
+        float v1x = hip.X - knee.X, v1y = hip.Y - knee.Y, v1z = hip.Z - knee.Z;
+        float v2x = ankle.X - knee.X, v2y = ankle.Y - knee.Y, v2z = ankle.Z - knee.Z;
+        float dot = v1x * v2x + v1y * v2y + v1z * v2z;
+        float mag1 = (float)System.Math.Sqrt(v1x * v1x + v1y * v1y + v1z * v1z);
+        float mag2 = (float)System.Math.Sqrt(v2x * v2x + v2y * v2y + v2z * v2z);
+        if (mag1 == 0 || mag2 == 0) return standingKneeAngle;
+        float dotNorm = dot / (mag1 * mag2);
+        if (dotNorm &gt; 1f) dotNorm = 1f;
+        if (dotNorm &lt; -1f) dotNorm = -1f;
+        return (float)(System.Math.Acos(dotNorm) * (180.0 / System.Math.PI));
+      }
+
+      public void Calibrate(Skeleton skeleton)
+      {
+        angleSum += GetKneeAngle(skeleton);
+        calibrationFrames++;
+        if (calibrationFrames &gt;= 90)
+        {
+          standingKneeAngle = angleSum / calibrationFrames;
+          IsCalibrated = true;
+        }
+      }
+
+      public void Process(Skeleton skeleton)
+      {
+        if (!IsCalibrated) return;
+        float dropFromStanding = standingKneeAngle - GetKneeAngle(skeleton);
+        if (state == State.Up)
+        {
+          framesPastDownThreshold = (dropFromStanding &gt; DownOffset) ? framesPastDownThreshold + 1 : 0;
+          if (framesPastDownThreshold &gt;= DebounceFrames)
+          {
+            state = State.Down;
+            framesPastDownThreshold = 0;
+            framesPastUpThreshold = 0;
+          }
+        }
+        else
+        {
+          framesPastUpThreshold = (dropFromStanding &lt; UpOffset) ? framesPastUpThreshold + 1 : 0;
+          if (framesPastUpThreshold &gt;= DebounceFrames)
+          {
+            state = State.Up;
+            framesPastUpThreshold = 0;
+            framesPastDownThreshold = 0;
+            Reps++;
+          }
+        }
+      }
+
+      public void Reset()
+      {
+        if (Reps &gt;= Goal) Reps = 0;
+        IsCalibrated = false;
+        calibrationFrames = 0;
+        angleSum = 0f;
+        state = State.Up;
+        framesPastDownThreshold = 0;
+        framesPastUpThreshold = 0;
+      }
+    }</code></pre>
+              </div>
+        </div>
+          </details>
+
+        <h2>Next Steps</h2>
+        <p>
+        Overall, I think this project was fairly practical in terms of resolving an actual health issue by prompting a real impetus to the user by periodically pausing their current screen with an inescapable interface until the squat goal has been hit. Moving forward, further iterations could incorporate an emergency opt-out button in the application interface, in case urgent work needs to resume. However, this recourse could be misused as a form of procrastination; if this system were to be implemented, accountability in the form of payment (each button donates money from a linked credit card, etc.) could be considered as a way to combat this. Another planned step to take is to further study joint-angle calculation via the dot product method in 3D Euclidean space, as the knee-angle detection math was outsourced. Some pre-studying will be set in motion to prepare for first year statics and dynamics which covers this topic.
+        </p>
+
     </section>
   </main>
 
