@@ -271,7 +271,7 @@ header { border-bottom: 1px solid var(--line); background: var(--paper); }
 .resume-embed {
   border: 1px solid var(--line);
   width: 100%;
-  height: 900px;
+  height: 1200px;
   margin-top: 28px;
 }
 
@@ -310,6 +310,6 @@ footer .wrap {
     border-bottom: none;
   }
   .resume-embed {
-    height: 500px;
+    height: 900px;
   }
 }
